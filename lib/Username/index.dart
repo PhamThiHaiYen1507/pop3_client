@@ -1,42 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:laptrinhmang/Login/controller.dart';
-import 'package:laptrinhmang/styles/styles.dart';
-import 'package:laptrinhmang/styles/text_define.dart';
+import 'package:laptrinhmang/Buttom/index.dart';
+import 'package:laptrinhmang/Username/controller.dart';
+import 'package:laptrinhmang/global.dart';
 
-import '../Buttom/index.dart';
 import '../CustomTextField/index.dart';
-import '../global.dart';
+import '../styles/styles.dart';
+import '../styles/text_define.dart';
 
-class Login extends StatelessWidget {
-  final String username;
-  const Login({super.key, required this.username});
+class Username extends StatelessWidget {
+  const Username({super.key});
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Global.typeScreen = TypeScreen.USERNAME;
+        Global.typeScreen = TypeScreen.CONNECT_SERVER;
         return true;
       },
       child: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-        child: GetBuilder<LoginController>(
-            init: LoginController(username),
+        child: GetBuilder<UsernameController>(
+            init: UsernameController(),
             builder: (controller) {
               return Scaffold(
                 body: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(children: [
                     const SizedBox(height: 50),
-                    Text('Login with "$username"', style: TextDefine.t1_R),
                     CustomTextField(
-                        focusNode: controller.passFocusNode,
-                        obscureText: true,
-                        controller: controller.pass,
-                        hintText: "Password"),
+                        controller: controller.userName, hintText: "Username"),
                     const SizedBox(height: 80),
-                    Button(onPressed: controller.onConfirm, text: 'Login'),
+                    Button(onPressed: controller.onConfirm, text: 'Tiếp theo'),
                   ]),
                 ),
                 appBar: AppBar(

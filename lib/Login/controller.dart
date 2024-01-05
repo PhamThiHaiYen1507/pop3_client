@@ -1,68 +1,29 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:laptrinhmang/global.dart';
 
 class LoginController extends GetxController {
-  late final TextEditingController userName;
   late final TextEditingController pass;
-  Socket? socket;
+  late final FocusNode passFocusNode;
+  final String username;
+
+  LoginController(this.username);
   @override
   void onInit() {
-    connect();
-    userName = TextEditingController(text: 'demo@localhost.com');
     pass = TextEditingController(text: 'haiyen');
+    passFocusNode = FocusNode();
     super.onInit();
   }
 
   void onConfirm() {
-    socket?.write('USER ${userName.text}\r\n');
-    socket?.write('PASS ${pass.text}');
-  }
-
-  void connect() async {
-    socket = await Socket.connect('10.0.2.2', 110);
-
-    socket?.listen(
-      (Uint8List data) {
-        String response = utf8.decode(data);
-        print('Received: $response');
-      },
-      onDone: () {
-        print('Connection closed by server');
-        socket?.destroy();
-      },
-      onError: (error) {
-        print('Error: $error');
-        socket?.destroy();
-      },
-    );
+    passFocusNode.unfocus();
+    Global.socket?.write('PASS ${pass.text}\r\n');
   }
 
   @override
   void onClose() {
-    userName.dispose();
+    passFocusNode.dispose();
     pass.dispose();
     super.onClose();
   }
-
-  // Future<String> get _localPath async {
-  //   final directory = await getApplicationDocumentsDirectory();
-
-  //   return directory.path;
-  // }
-
-  // Future<File> get _localFile async {
-  //   final path = await _localPath;
-  //   return File('$path/counter.txt');
-  // }
-
-  // Future<File> writeCounter(int counter) async {
-  //   final file = await _localFile;
-
-  //   // Write the file
-  //   return file.writeAsString('$counter');
-  // }
 }

@@ -1,15 +1,23 @@
 name: laptrinhmang
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: ">=2.19.6 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   get: ^4.6.5
+  path_provider: ^2.1.1
+  logger_flutter:
+    git:
+      url: https://github.com/jtans/logger_flutter.git
+      ref: master
+  flutter_html: ^2.2.1
+  flutter_svg: ^0.23.0+1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -18,3 +26,16 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+
+  fonts:
+    - family: Quicksand
+      fonts:
+        - asset: assets/fonts/Quicksand-Bold.ttf
+        - asset: assets/fonts/Quicksand-Light.ttf
+        - asset: assets/fonts/Quicksand-Medium.ttf
+        - asset: assets/fonts/Quicksand-Regular.ttf
+        - asset: assets/fonts/Quicksand-Semibold.ttf
