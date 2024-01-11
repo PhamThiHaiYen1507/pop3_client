@@ -10,14 +10,14 @@ import '../ProfilePage/index.dart';
 enum TYPE_HOME { HOME, USER }
 
 class HomeController extends GetxController {
-    late final Rx<TYPE_HOME> typeHome;
+  late final Rx<TYPE_HOME> typeHome;
   late final Rx<Widget> currentPage;
 
   @override
   void onInit() {
-        typeHome = Rx(TYPE_HOME.HOME);
+    typeHome = Rx(TYPE_HOME.HOME);
     currentPage = Rx(const SizedBox());
-
+    onChangePage();
     Global.socket?.write('LIST\r\n');
 
     int i = 0;
@@ -30,7 +30,8 @@ class HomeController extends GetxController {
     }
     super.onInit();
   }
-    void onChangePage() {
+
+  void onChangePage() {
     switch (typeHome.value) {
       case TYPE_HOME.HOME:
         currentPage.value = const HomePage();

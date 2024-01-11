@@ -73,16 +73,27 @@ class Global {
     }
   }
 
-  Future<String> _createFileFromString(String encodedStr, String name) async {
-    Uint8List bytes = base64.decode(encodedStr);
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    String fullPath = '$dir/name';
-    print("local file full path $fullPath");
-    File file = File(fullPath);
-    await file.writeAsBytes(bytes);
-    print(file.path);
+  static Future<String> createFileFromString(
+      String encodedStr, String name) async {
+    try {
+      Uint8List bytes = base64.decode(encodedStr);
+      String dir = (await getApplicationDocumentsDirectory()).path;
+      String fullPath = '$dir/$name';
+      File file = File(fullPath);
 
-    return file.path;
+      await file.writeAsBytes(bytes);
+      if (file.path.isNotEmpty) {
+        Utils.showNotification(
+            NOTIFICATION_TYPE.SUCCESS, 'Download File', 'Download Sucess');
+      }
+
+      return file.path;
+    } catch (e) {
+      Utils.showNotification(
+          NOTIFICATION_TYPE.ERROR, 'Download File', 'Download failed');
+      logD(e);
+      return '';
+    }
   }
 
   static Future<void> connect(String id) async {
@@ -98,7 +109,6 @@ class Global {
           } catch (e) {
             response = '';
           }
-          logD(response);
           if (typeScreen == TypeScreen.CONNECT_SERVER) {
             if (response.startsWith("+OK")) {
               Utils.showNotification(
@@ -186,7 +196,9 @@ class Global {
                 }
                 if (part.isNotEmpty) {
                   String data = part.contains('\r\n\r\n')
-                      ? part.substring(part.indexOf('\r\n\r\n')).trim()
+                      ? part
+                          .substring(part.indexOf('\r\n\r\n'))
+                          .replaceAll('\r\n\r\n', '')
                       : '';
                   String name = part.contains('filename=')
                       ? part.substring(part.indexOf('filename=')).contains('\n')
@@ -194,28 +206,52 @@ class Global {
                               .substring(part.indexOf('filename='))
                               .substring(0, part.indexOf('\n'))
                               .replaceAll('filename=', '')
-                              .trim()
+                              .replaceAll('\n', '')
+                              .replaceAll('\r', '')
                           : ''
                       : '';
-                  logD(data);
-
+                  logD(currentContentType);
                   switch (currentContentType) {
                     case 'text/plain':
                       if (text) {
                         textContent = data;
                         text = false;
                       } else {
+                        logD('text');
                         file.add(FileData('text/plain', data, name));
                       }
                       break;
-                    case 'text/html':
-                      htmlContent = data;
+                    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                      logD('text');
+                      file.add(FileData(
+                          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                          data,
+                          name));
                       break;
+                    // case 'text/html':
+                    //   htmlContent = data;
+                    //   break;
                     case 'image/jpeg':
+                      logD('ảnh');
                       file.add(FileData('image/jpeg', data, name));
                       break;
+                    case 'image/png':
+                      logD('ảnh');
+                      file.add(FileData('image/png', data, name));
+                      break;
                     case 'application/pdf':
+                      logD('pdf');
                       file.add(FileData('application/pdf', data, name));
+                      break;
+                    case 'application/vnd.ms-excel':
+                      logD('excel');
+                      file.add(
+                          FileData('application/vnd.ms-excel', data, name));
+                      break;
+                    case 'application/vnd.ms-powerpoint':
+                      logD('powerpoint');
+                      file.add(FileData(
+                          'application/vnd.ms-powerpoint', data, name));
                       break;
                     default:
                       break;
@@ -238,6 +274,10 @@ class Global {
               val?.emailDataList.add(data);
             });
             i++;
+            Global.accountSelected.update((val) {
+              val?.emailDataList.removeWhere((element) => element.from.isEmpty);
+            });
+
             if (accountList.firstWhereOrNull((element) =>
                     element.username == accountSelected.value.username) ==
                 null) {
@@ -247,6 +287,7 @@ class Global {
                   element.username == accountSelected.value.username));
               accountList.add(accountSelected.value);
             }
+
             writeJsonToFile();
           }
         },

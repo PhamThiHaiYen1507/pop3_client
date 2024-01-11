@@ -56,7 +56,9 @@ class EmailListItem extends StatelessWidget {
                         : emailData.content),
                 Row(
                     children: emailData.file.map((e) {
-                  return e.content.isNotEmpty && e.name.isNotEmpty
+                  return e.content.isNotEmpty &&
+                          e.name.isNotEmpty &&
+                          (e.type != 'image/png' && e.type != 'image/jpeg')
                       ? Expanded(child: FileView(fileData: e))
                       : const SizedBox();
                 }).toList())
