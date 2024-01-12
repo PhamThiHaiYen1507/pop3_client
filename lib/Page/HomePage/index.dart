@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:laptrinhmang/EmailDetail/index.dart';
 import 'package:laptrinhmang/styles/text_define.dart';
 
-import '../EmailListItem/index.dart';
-import '../global.dart';
+import '../../widget/EmailListItem/index.dart';
+import '../../global.dart';
+import '../EmailDetail/index.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

@@ -1,15 +1,16 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:laptrinhmang/FileView/index.dart';
 import 'package:laptrinhmang/Model/email_data.dart';
+import 'package:laptrinhmang/global.dart';
 import 'package:laptrinhmang/styles/text_define.dart';
 
-import '../global.dart';
-import '../styles/svg.dart';
+import '../../widget/FileView/index.dart';
+import '../../styles/svg.dart';
 
 class EmailDetail extends StatelessWidget {
   final EmailData emailData;
@@ -91,39 +92,46 @@ class EmailDetail extends StatelessWidget {
                             element.type == 'image/jpeg') &&
                         element.name.isNotEmpty)
                     .map(
-                      (e) => Stack(
-                        children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.memory(
-                                base64Decode(e.content
-                                    .replaceAll('\r', '')
-                                    .replaceAll('\n', '')),
+                  (e) {
+                    Uint8List data;
+                    try {
+                      data = base64Decode(
+                          e.content.replaceAll('\r', '').replaceAll('\n', ''));
+                    } catch (e) {
+                      data = Uint8List(0);
+                    }
+                    return Stack(
+                      children: [
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.memory(data,
                                 gaplessPlayback: true,
                                 fit: BoxFit.cover,
-                              )),
-                          Positioned(
-                            top: 20,
-                            right: 20,
-                            child: InkWell(
-                              onTap: () {
-                                Global.createFileFromString(
-                                    e.content
-                                        .trim()
-                                        .replaceAll('\r', '')
-                                        .replaceAll('\n', ''),
-                                    e.name);
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(Icons.download_for_offline_sharp),
-                              ),
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Image.asset(Picture.avatar))),
+                        Positioned(
+                          top: 20,
+                          right: 20,
+                          child: InkWell(
+                            onTap: () {
+                              Global.createFileFromString(
+                                  e.content
+                                      .trim()
+                                      .replaceAll('\r', '')
+                                      .replaceAll('\n', '')
+                                      .trim(),
+                                  e.name);
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Icon(Icons.download_for_offline_sharp),
                             ),
-                          )
-                        ],
-                      ),
-                    )
-                    .toList(),
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                ).toList(),
               const Divider()
             ],
           ),

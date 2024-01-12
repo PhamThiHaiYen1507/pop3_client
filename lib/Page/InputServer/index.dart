@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:laptrinhmang/InputServer/controller.dart';
 import 'package:laptrinhmang/styles/text_define.dart';
 
-import '../Buttom/index.dart';
-import '../CustomTextField/index.dart';
+import '../../widget/Buttom/index.dart';
+import '../../widget/CustomTextField/index.dart';
+import 'controller.dart';
 
 class InputServer extends StatelessWidget {
   const InputServer({super.key});

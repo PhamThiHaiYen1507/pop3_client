@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:laptrinhmang/Model/file_data.dart';
 import 'package:laptrinhmang/global.dart';
 
+import '../../Model/email_data.dart';
 import '../HomePage/index.dart';
-import '../Model/email_data.dart';
 import '../ProfilePage/index.dart';
 
 enum TYPE_HOME { HOME, USER }

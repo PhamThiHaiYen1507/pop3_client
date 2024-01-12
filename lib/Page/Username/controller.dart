@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:laptrinhmang/Model/account_data.dart';
 
-import '../global.dart';
+import '../../global.dart';
 
 class UsernameController extends GetxController {
   late final TextEditingController userName;
@@ -14,7 +14,7 @@ class UsernameController extends GetxController {
 
   void onConfirm() {
     Global.socket?.write('USER ${userName.text}\r\n');
-    Global.accountSelected.value = AccountData(userName.text, []);
+    Global.accountSelected.value = AccountData(userName.text, []); 
   }
 
   @override

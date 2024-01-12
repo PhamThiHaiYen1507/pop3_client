@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:laptrinhmang/Login/controller.dart';
+import 'package:laptrinhmang/Page/Login/controller.dart';
+import 'package:laptrinhmang/widget/Buttom/index.dart';
+import 'package:laptrinhmang/widget/CustomTextField/index.dart';
 import 'package:laptrinhmang/styles/styles.dart';
 import 'package:laptrinhmang/styles/text_define.dart';
 
-import '../Buttom/index.dart';
-import '../CustomTextField/index.dart';
-import '../global.dart';
+import '../../global.dart';
 
 class Login extends StatelessWidget {
   final String username;

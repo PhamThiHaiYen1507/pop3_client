@@ -1,7 +1,8 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
-import 'package:laptrinhmang/Home/index.dart';
-import 'package:laptrinhmang/InputServer/index.dart';
-import 'package:laptrinhmang/Username/index.dart';
+import 'package:laptrinhmang/page/Username/index.dart';
+
+import '../Page/Home/index.dart';
+import '../Page/InputServer/index.dart';
 
 class Routes {
   // ignore: constant_identifier_names

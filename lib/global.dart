@@ -6,16 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:laptrinhmang/Model/account_data.dart';
 import 'package:laptrinhmang/Model/file_data.dart';
-import 'package:laptrinhmang/loading_overlay/loading_overlay.dart';
 import 'package:laptrinhmang/styles/app_logger.dart';
 import 'package:laptrinhmang/styles/svg.dart';
 import 'package:laptrinhmang/styles/utils.dart';
 import 'package:path_provider/path_provider.dart';
-
-import 'Home/index.dart';
-import 'Login/index.dart';
 import 'Model/email_data.dart';
-import 'Username/index.dart';
+import 'page/Home/index.dart';
+import 'page/Login/index.dart';
+import 'page/Username/index.dart';
 
 // ignore: constant_identifier_names
 enum TypeScreen { CONNECT_SERVER, LOGIN, USERNAME, HOME }
@@ -78,7 +76,8 @@ class Global {
     try {
       Uint8List bytes = base64.decode(encodedStr);
       String dir = (await getApplicationDocumentsDirectory()).path;
-      String fullPath = '$dir/$name';
+      String fullPath =
+          '$dir/${name.replaceAll(name.substring(0, name.contains('.') ? name.indexOf('.') + 3 : name.length), '')}';
       File file = File(fullPath);
 
       await file.writeAsBytes(bytes);
@@ -98,7 +97,6 @@ class Global {
 
   static Future<void> connect(String id) async {
     LoadingOverlay.show();
-    await Future.delayed(const Duration(seconds: 2));
     try {
       socket = await Socket.connect(id, 110);
       socket?.listen(
@@ -109,6 +107,7 @@ class Global {
           } catch (e) {
             response = '';
           }
+          logD(response);
           if (typeScreen == TypeScreen.CONNECT_SERVER) {
             if (response.startsWith("+OK")) {
               Utils.showNotification(
@@ -179,7 +178,7 @@ class Global {
                 } else if (part.contains('Subject:')) {
                   subject = part.substring('Subject: '.length).trim();
                 } else if (part.contains('Date:')) {
-                  date = part.substring('Date: '.length).trim();
+                  date = part.substring('Date: '.length);
                 }
               }
               List<String> partContent = response.contains('------')
@@ -305,6 +304,7 @@ class Global {
     } catch (e) {
       Utils.showNotification(
           NOTIFICATION_TYPE.ERROR, 'Connect POP3 Server', 'Connect fail');
+      logD(e);
     }
     LoadingOverlay.close();
   }
@@ -333,5 +333,59 @@ class Global {
       }
     }
     return '';
+  }
+}
+
+class LoadingOverlay {
+  final Widget? indicator;
+  final Color? barrierColor;
+
+  static LoadingOverlay? _instance;
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static LoadingOverlay get instance => _instance ?? LoadingOverlay();
+  bool _show = false;
+
+  factory LoadingOverlay({Widget? indicator, Color? barrierColor}) {
+    _instance ??= LoadingOverlay._internal(indicator, barrierColor);
+    return _instance ??
+        LoadingOverlay(
+            barrierColor: Colors.black26,
+            indicator: Image.asset(height: 80, Picture.loading));
+  }
+
+  LoadingOverlay._internal(this.indicator, this.barrierColor);
+
+  static Future<void> show() async {
+    final context = _instance?.navigatorKey.currentState?.overlay?.context;
+
+    if (_instance != null && context != null && !_instance!._show) {
+      _instance!._show = true;
+      showDialog(
+        barrierDismissible: false,
+        barrierColor: _instance!.barrierColor,
+        context: context,
+        builder: (ctx) => WillPopScope(
+            child: Center(
+              child: _instance!.indicator ?? const SizedBox(),
+            ),
+            onWillPop: () async => false),
+      ).then((value) => _instance!._show = false);
+    }
+  }
+
+  static void close() {
+    final context = _instance?.navigatorKey.currentState?.overlay?.context;
+    if (_instance != null && context != null && _instance!._show) {
+      Navigator.pop(context);
+    }
+  }
+
+  static Future<T> load<T>(Future<T> callback) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    show();
+    final T data = await callback;
+    close();
+
+    return data;
   }
 }

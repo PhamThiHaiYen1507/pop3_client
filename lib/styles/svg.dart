@@ -7,5 +7,5 @@ class SvgIcon {
 
 class Picture {
   static const String loading = 'assets/images/loading.png';
-  static const String avatar = 'assets/images/avatar.png';
+  static const String avatar = 'assets/images/avatar.jpg';
 }

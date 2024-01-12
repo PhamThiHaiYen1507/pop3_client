@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:laptrinhmang/Buttom/index.dart';
-import 'package:laptrinhmang/Home/controller.dart';
-import 'package:laptrinhmang/InputServer/index.dart';
-import 'package:laptrinhmang/global.dart';
-import 'package:laptrinhmang/styles/text_define.dart';
+
+import '../../widget/Buttom/index.dart';
+import '../../global.dart';
+import '../../styles/text_define.dart';
+import '../Home/controller.dart';
+import '../InputServer/index.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -57,10 +58,13 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           Button(
-              onPressed: () {
-                Global.socket?.close();
+              onPressed: () async {
+                Global.socket?.write('QUIT\r\n');
+                LoadingOverlay.show();
+                await Future.delayed(const Duration(seconds: 1));
+                LoadingOverlay.close();
                 Global.typeScreen = TypeScreen.CONNECT_SERVER;
-                Get.offAll(const InputServer());
+                Get.offAll(() => const InputServer());
               },
               text: 'Log out')
         ],

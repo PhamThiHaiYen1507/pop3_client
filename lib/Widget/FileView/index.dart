@@ -3,7 +3,7 @@ import 'package:laptrinhmang/Model/file_data.dart';
 import 'package:laptrinhmang/global.dart';
 import 'package:laptrinhmang/styles/utils.dart';
 
-import '../styles/text_define.dart';
+import '../../styles/text_define.dart';
 
 class FileView extends StatelessWidget {
   final FileData fileData;
@@ -32,7 +32,11 @@ class FileView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                fileData.name,
+                fileData.name.replaceAll(
+                    fileData.name.substring(fileData.name.contains('.')
+                        ? fileData.name.indexOf('.') + 4
+                        : fileData.name.length),
+                    ''),
                 style: TextDefine.t2_B,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

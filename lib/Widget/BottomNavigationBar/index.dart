@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:laptrinhmang/Page/Home/controller.dart';
 
-import '../Home/controller.dart';
-import '../styles/commons.dart';
-import '../styles/styles.dart';
-import '../styles/text_define.dart';
+import '../../styles/styles.dart';
+import '../../styles/text_define.dart';
 
 class ItemData {
   final IconData icon;

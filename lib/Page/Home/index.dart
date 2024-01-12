@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:laptrinhmang/Home/controller.dart';
+import 'package:laptrinhmang/Page/Home/controller.dart';
 
-import '../BottomNavigationBar/index.dart';
+import '../../widget/BottomNavigationBar/index.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});

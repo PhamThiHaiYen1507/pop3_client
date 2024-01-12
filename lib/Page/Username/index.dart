@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:laptrinhmang/Buttom/index.dart';
-import 'package:laptrinhmang/Username/controller.dart';
+import 'package:laptrinhmang/page/Username/controller.dart';
 import 'package:laptrinhmang/global.dart';
 
-import '../CustomTextField/index.dart';
-import '../styles/styles.dart';
-import '../styles/text_define.dart';
+import '../../widget/Buttom/index.dart';
+import '../../widget/CustomTextField/index.dart';
+import '../../styles/styles.dart';
+import '../../styles/text_define.dart';
 
 class Username extends StatelessWidget {
   const Username({super.key});
