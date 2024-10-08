@@ -4,7 +4,7 @@ publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: ">=2.19.6 <3.0.0"
+  sdk: ">=2.19.6 <4.0.0"
 
 dependencies:
   flutter:
@@ -15,14 +15,15 @@ dependencies:
     git:
       url: https://github.com/jtans/logger_flutter.git
       ref: master
-  flutter_html: ^2.2.1
+  flutter_html: 
+    path: ./package/flutter_html
   flutter_svg: ^0.23.0+1
-  intl: ^0.18.1
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
